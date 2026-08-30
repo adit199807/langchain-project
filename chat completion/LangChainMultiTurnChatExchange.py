@@ -2,6 +2,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+
 load_dotenv()
 llm = ChatOpenAI(model='gpt-4o-mini')
 chat_history = []
