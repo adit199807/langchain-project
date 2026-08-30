@@ -20,9 +20,9 @@ def weatherApi(city:str):
         Current weather of the city
     """
     return 'Its Sunny'
-
+tools = [weatherApi]
 llm = ChatOpenAI(model='gpt-4o-mini')
-agent = create_agent(model=llm, tools=[weatherApi],response_format=Response)
+agent = create_agent(model=llm, tools=tools,response_format=Response)
 chatHistory = []
 prompt = ChatPromptTemplate.from_messages([
     SystemMessage(content= 'You are a helpful AI assitant'),
