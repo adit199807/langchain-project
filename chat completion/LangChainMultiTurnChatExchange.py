@@ -16,11 +16,11 @@ def main():
     new_user_query = ''
 
     while new_user_query != 'exit':
-        new_user_query = input("Please enter your query: ")
+        new_user_query = input("Please enter your query:")
         if new_user_query == 'exit':
             continue
         chat_history.append(HumanMessage(content=new_user_query))
-        response = chain.invoke(input={'new_user_query':new_user_query, 'chat_history':chat_history})
+        response = chain.invoke(input={'chat_history':chat_history})
         print(response.content)
         chat_history.append(response)
 
