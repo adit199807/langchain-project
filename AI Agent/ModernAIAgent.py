@@ -6,7 +6,9 @@ from langchain.tools import tool
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from langchain.messages import HumanMessage, SystemMessage
+from dotenv import load_dotenv
 
+load_dotenv()
 class Response(BaseModel):
     weather:str = Field(description='It contians the descriptions of weather')
 
