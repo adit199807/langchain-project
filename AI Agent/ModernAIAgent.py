@@ -18,7 +18,7 @@ def weatherApi(city:str):
     """
     return 'Its Sunny'
 
-llm = ChatOpenAI(model='gpt-5')
+llm = ChatOpenAI(model='gpt-4o-mini')
 agent = create_agent(model=llm, tools=[weatherApi],response_format=Response)
 
 def main():
