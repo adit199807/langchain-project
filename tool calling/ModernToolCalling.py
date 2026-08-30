@@ -20,7 +20,8 @@ def productPrice(product:str):
     Return:
         Price of the product
     """
-    dic ={'Apple':10, 'Mango':20, 'Avacado':2}
+    product = product.lower()
+    dic ={'apple':10, 'mango':20, 'avacado':2}
     return dic.get(product, 0)
 
 @tool
@@ -30,16 +31,11 @@ def productDiscount(product:str):
     Args:
         product: The name of product
     Return:
-        discount on the product
+        discount on the product in dollars
     """
     dic ={'Apple':2, 'Mango':1, 'Avacado':0.5}
     return dic.get(product, 0)
 
-ChatTemp = ChatPromptTemplate([
-    SystemMessage(content='You are AI assistant. Help user, use provided tools if needed'),
-    MessagesPlaceholder(variable_name='chatHistory')
-])
-chatHistory = []
 tools = [productPrice, productDiscount]
 
 def main():

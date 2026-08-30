@@ -1,7 +1,7 @@
 from langchain.tools import tool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage, ToolMessage
 from langchain.chat_models import init_chat_model
 from pydantic import BaseModel, Field
 
@@ -35,32 +35,37 @@ def productDiscount(product:str):
     dic ={'Apple':2, 'Mango':1, 'Avacado':0.5}
     return dic.get(product, 0)
 
-ChatTemp = ChatPromptTemplate([
-    SystemMessage(content='You are AI assistant. Help user, use provided tools if needed'),
-    MessagesPlaceholder(variable_name='chatHistory')
-])
-chatHistory = []
 tools = [productPrice, productDiscount]
+chatHistory = []
 
 def main():
     toolMap = {tool.name:tool for tool in tools}
     llm = init_chat_model(model=MODEL_NAME)
     llm = llm.bind_tools(tools)
     
-    chain = ChatTemp | llm
     userInput = ''
-    while userInput != 'exit':
-        userInput  = input('Type in product name :')
-        if userInput == 'exit':
-            continue
-        chatHistory.append(HumanMessage(content=userInput))
-        response = chain.invoke(input={'chatHistory':chatHistory})
-        if len(response.tool_calls):
-            toolName = response.tool_calls[0]['name']
-            args = response.tool_calls[0]['args']['product']
-        print(toolName, args)
-        print(response.content)
-        chatHistory.append(AIMessage(content=response.content))
+    # userInput  = input('Type in product name :')
+    chatHistory.append(HumanMessage(content='Price of Avacado'))
+
+    for iteration in range(1, MAX_ITERATION + 1):
+        aiMessage = llm.invoke(chatHistory)
+        tool_calls = aiMessage.tool_calls
+        if not tool_calls:
+            chatHistory.append(AIMessage(content=aiMessage.content))
+            print(aiMessage.content)
+            break
+        
+        tool_call = tool_calls[0]
+        tool_name = tool_call.get("name")
+        tool_args = tool_call.get("args", {})
+        tool_call_id = tool_call.get("id")
+        tool_to_use = toolMap.get(tool_name)
+
+        if tool_to_use is None:
+            raise ValueError(f"Tool '{tool_name}' not found")
+        chatHistory.append(aiMessage)
+        observation = tool_to_use.invoke(tool_args)
+        chatHistory.append(ToolMessage(content=str(observation), tool_call_id = tool_call_id))
 
 
 if __name__ == '__main__':
