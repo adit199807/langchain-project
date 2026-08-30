@@ -22,7 +22,7 @@ def main():
         chat_history.append(HumanMessage(content=new_user_query))
         response = chain.invoke(input={'chat_history':chat_history})
         print(response.content)
-        chat_history.append(response)
+        chat_history.append(AIMessage(content=response.content))
 
 if __name__ == '__main__':
     main()
