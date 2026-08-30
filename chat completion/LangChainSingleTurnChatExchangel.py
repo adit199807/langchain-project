@@ -1,3 +1,15 @@
+# Description: 
+#--------------------------------------------------------
+# langchain_core.prompt.PromptTemplate:  
+# 1)is usually used for single trun chat exchange. You can use it for multi-chat   
+# exchange, but have to manaully have the appending for messages
+# 2)Single shot prompting
+#--------------------------------------------------------
+#langchain_core.prompt.ChatPromptTemplate : Is usally used for multiple time 
+# chat exchange.
+# 1)Multi turn chat
+# 2)Multi shot prompting 
+
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv

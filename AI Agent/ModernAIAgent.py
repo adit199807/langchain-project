@@ -1,3 +1,5 @@
+# Description: Usually AI Agents are build to let LLM have tool calling so that they can perfrom action in a deterministic way
+
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_openai import ChatOpenAI
@@ -30,7 +32,7 @@ def main():
                 )
             }
         )
-    print(result)
+    print(result['structured_response'].weather)
 
 
 
