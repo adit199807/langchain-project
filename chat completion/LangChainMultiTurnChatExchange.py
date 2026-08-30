@@ -12,15 +12,16 @@ def main():
         MessagesPlaceholder(variable_name="chat_history"),
     ])
     chain = chatTemplate | llm
-    count = 0
+    new_user_query = ''
 
-    while count < 2:
+    while new_user_query != 'exit':
         new_user_query = input("Please enter your query: ")
+        if new_user_query == 'exit':
+            continue
         chat_history.append(HumanMessage(content=new_user_query))
         response = chain.invoke(input={'new_user_query':new_user_query, 'chat_history':chat_history})
         print(response.content)
         chat_history.append(response)
-        count+=1
 
 if __name__ == '__main__':
     main()
