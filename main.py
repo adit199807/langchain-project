@@ -1,4 +1,4 @@
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
@@ -10,7 +10,7 @@ key = os.environ.get('OPENAI_API_KEY')
 def main():
     print("Hello from langchain-project!")
 
-    llm = OpenAI(model='gpt-4o-mini-2024-07-18')
+    # llm = ChatOpenAI(model='gpt-4o-mini-2024-07-18')
     information = """
     As a Senior Software Engineer with 6 years, I have been designing fault tolerant, scalable distributed systems, on cloud native platforms across finance,
     education, health care and human capital management domains. I have specialized in AI/Machine Learning implementation including RAG pipelines,
@@ -20,16 +20,21 @@ def main():
     GitHub Actions along with designing Docker images and configuring Kubernetes. Also have mentored engineering teams/interns, establishing coding
     standards, code reviews, engaged directly with and key stakeholders to elicit and analyze business requirements.
     """
-    system_prompt = """
-    This is the information about a user:{information}. Perfrom following activity
+    summary_template = """
+    given the information {information} about a person I want you to create:
     1. A short summary
     2. two interesting facts about them
     """
-    summary_prompt_template = PromptTemplate(
-            input_variables=["information"], template=system_prompt
-        )
-    chian = summary_prompt_template | llm
-    response = chian.invoke(input={'information':information})
 
+    summary_prompt_template = PromptTemplate(
+        input_variables=["information"], template=summary_template
+    )
+
+    # llm = ChatOllama(temperature=0, model="gemma3:270m")
+    llm = ChatOpenAI(temperature=0, model="gpt-5")
+    chain = summary_prompt_template | llm
+
+    response = chain.invoke(input={"information": information})
+    print(response.content)
 if __name__ == "__main__":
     main()
