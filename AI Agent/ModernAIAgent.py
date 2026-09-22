@@ -24,6 +24,7 @@ def weatherApi(city:str):
     return 'Its Sunny'
 tools = [weatherApi]
 llm = ChatOpenAI(model='gpt-4o-mini')
+checkPointer = MemorySaver()
 agent = create_agent(model=llm, tools=tools,response_format=Response)
 chatHistory = []
 prompt = ChatPromptTemplate.from_messages([
